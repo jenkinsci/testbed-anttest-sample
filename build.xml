@@ -1,0 +1,46 @@
+<project default="all">
+  <target name="prep">
+    <fail message="app.jar is missing">
+      <condition>
+        <not>
+          <available file="app.jar"/>
+        </not>
+      </condition>
+    </fail>
+  </target>
+  <target name="compile" depends="prep">
+    <mkdir dir="build/classes"/>
+    <javac srcdir="src" destdir="build/test-classes">
+      <compilerArg value="-Xlint"/>
+      <classpath>
+        <pathelement path="app.jar"/>
+      </classpath>
+    </javac>
+  </target>
+  <target name="test" depends="compile">
+    <mkdir dir="build/test-classes"/>
+    <javac srcdir="test" destdir="build/test-classes" debug="on">
+      <classpath>
+        <pathelement path="app.jar"/>
+        <fileset dir="lib" includes="*.jar"/>
+      </classpath>
+    </javac>
+
+    <mkdir dir="build/test-reports"/>
+    <junit printsummary="true">
+      <classpath>
+        <pathelement path="build/test-classes"/>
+        <pathelement path="build/classes"/>
+        <fileset dir="lib" includes="*.jar"/>
+      </classpath>
+      <formatter type="xml"/>
+      <batchtest todir="build/test-reports">
+        <fileset dir="test" includes="**/*Test.java"/>
+      </batchtest>
+    </junit>
+  </target>
+  <target name="clean">
+    <delete dir="build"/>
+  </target>
+  <target name="all" depends="test"/>
+</project>
