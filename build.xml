@@ -35,5 +35,8 @@
   <target name="clean">
     <delete dir="build"/>
   </target>
-  <target name="all" depends="test"/>
+  <target name="all" depends="test">
+    <echo>Sleeping 30 seconds to simulate the realistic test execution time.</echo>
+    <sleep seconds="30"/>
+  </target>
 </project>
